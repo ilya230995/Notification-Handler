@@ -1,0 +1,24 @@
+{
+  "name": "notification-handler",
+  "version": "1.0.0",
+  "description": "AWS Lambda handler that validates and stores user notification events",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test",
+    "lint": "eslint app test",
+    "start": "node app/run.js --input sample/events.json --log-level INFO"
+  },
+  "dependencies": {
+    "luxon": "^3.7.2",
+    "validator": "^13.15.35"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.15.0",
+    "globals": "^17.14.0"
+  }
+}
