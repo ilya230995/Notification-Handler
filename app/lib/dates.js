@@ -29,10 +29,10 @@ const NATURAL_FORMATS = [
 ];
 
 function parseNatural(text) {
-  let s = text.replace(/(\d+)(st|nd|rd|th)\b/gi, "$1");
-  const tz = s.match(/\s([A-Z]{2,5})$/);
+  let s = text.replace(/\b(\d{1,2})(st|nd|rd|th)\b/gi, "$1");
+  const tz = s.match(/\s([A-Za-z]{2,5})$/);
   if (tz) {
-    const offset = FIXED_OFFSETS[tz[1]];
+    const offset = FIXED_OFFSETS[tz[1].toUpperCase()];
     if (!offset) return null;
     s = s.slice(0, tz.index) + " " + offset;
   }
@@ -43,17 +43,26 @@ function parseNatural(text) {
   return null;
 }
 
+/**
+ * Parses a date in one of the supported formats and returns it as a UTC ISO string.
+ * @param {unknown} value
+ * @param {string} field name used in the error
+ * @returns {string}
+ * @throws {ValidationError}
+ */
 export function toIsoDate(value, field) {
   if (typeof value !== "string" || value.trim() === "") {
     throw new ValidationError(field, "must be a non-empty date string");
   }
+  if (value.length > 64) throw new ValidationError(field, "too long");
   const v = value.trim();
   if (/^\d+$/.test(v)) {
     throw new ValidationError(field, "numeric timestamps are not supported");
   }
 
   const candidates = [
-    () => DateTime.fromISO(v, OPTS),
+    // fromISO also accepts a bare time such as "10:00" and fills in today's date.
+    () => (/^[+-]?\d{4}/.test(v) ? DateTime.fromISO(v, OPTS) : null),
     () => DateTime.fromFormat(v, "yyyy/MM/dd HH:mmZZ", OPTS),
     () => DateTime.fromFormat(v, "yyyy/MM/dd", OPTS),
     () => parseNatural(v),

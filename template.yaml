@@ -1,0 +1,15 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: Validates user notification events and stores them as Notification rows.
+
+Resources:
+  NotificationHandlerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: nodejs22.x
+      Handler: app/handler.handler
+      CodeUri: .
+      Timeout: 30
+      Environment:
+        Variables:
+          LOG_LEVEL: INFO

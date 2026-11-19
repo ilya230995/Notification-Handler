@@ -1,5 +1,11 @@
 import { ValidationError } from "./errors.js";
 
+/**
+ * Turns a comma-separated string or an array of strings into a trimmed, deduplicated list.
+ * @param {unknown} value
+ * @returns {string[]}
+ * @throws {ValidationError}
+ */
 export function normalizeRoles(value) {
   if (value === null || value === undefined) return [];
 

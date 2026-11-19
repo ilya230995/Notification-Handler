@@ -1,6 +1,13 @@
 import isEmail from "validator/lib/isEmail.js";
 import { ValidationError } from "./errors.js";
 
+/**
+ * Validates an email address and lowercases its domain.
+ * @param {unknown} value
+ * @param {string} [field]
+ * @returns {string}
+ * @throws {ValidationError}
+ */
 export function assertEmail(value, field = "email") {
   if (typeof value !== "string") {
     throw new ValidationError(field, "must be a string");
